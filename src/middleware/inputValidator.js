@@ -2,7 +2,7 @@ import Joi from 'joi'
 
 
 const userScheme = Joi.object({
-    name:Joi.string().min(3).required,
+    name:Joi.string().min(3).required(),
     email:Joi.string().email().required()
 })
 
@@ -13,8 +13,9 @@ const validateUser= (req, res, next)=>{
         message:error.details[0].message
         
     })
-    console.log("Error of validatig databse: ", error)
+   
   }
+  next() 
 }
 
 export default validateUser

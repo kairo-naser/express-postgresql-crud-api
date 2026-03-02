@@ -24,7 +24,7 @@ app.use(erroHandling)
 // creating tables before starting the server
 creatUserTable()
 // testing
-app.use('/', async (req, res)=>{
+app.get('/', async (req, res)=>{
 try{
      const result = await pool.query("SELECT current_database()")
     res.send(`The database is connect is: ${result.rows[0].current_database}`)

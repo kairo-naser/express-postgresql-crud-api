@@ -1,8 +1,7 @@
 import { getUserByIdService, getUserService, createUserService, updateUserService, deleteUserService } from "../models/user.models.js"; 
 
 const handleResponse= (res, status,message, data=null)=>{
-res.status({
-    status,
+return res.status(status).json({
     message,
     data,
 })
@@ -61,7 +60,7 @@ export const updateUser = async (req, res,next )=>{
 export const deleteUser = async (req, res,next )=>{
     const id = req.params.id
     try{
-        const user = await deleteUser( id)
+        const user = await deleteUserService( id)
         if(!user) return handleResponse(res, 404, `User of this id:${id} is not found`)
         handleResponse(res, 200, "Deleted  user successfully  ", user)
 

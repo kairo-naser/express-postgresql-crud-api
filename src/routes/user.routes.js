@@ -3,8 +3,8 @@ import { createUser, deleteUser, getUserById, getUsers, updateUser } from '../co
 import validateUser from '../middleware/inputValidator.js'
 const userRoutes = Router()
 
-userRoutes.get('/users',validateUser, getUsers)
-userRoutes.post('/users', createUser)
+userRoutes.get('/users', getUsers)
+userRoutes.post('/users',validateUser, createUser)
 userRoutes.get('/users/:id', getUserById)
 userRoutes.put('/users/:id',validateUser,  updateUser)
 userRoutes.delete('/users/:id', deleteUser)
