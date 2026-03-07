@@ -1,107 +1,145 @@
 # Express PostgreSQL CRUD API
 
-A simple RESTful CRUD API built with Express.js and PostgreSQL. This repository demonstrates how to create a basic API for managing users with create, read, update, and delete operations.
+A lightweight RESTful API built with **Express.js** and **PostgreSQL**. This repository provides a simple user management system with full CRUD operations and a clean, modular codebase suitable for learning or bootstrapping small applications.
 
-## 🚀 Features
+---
 
-- Express.js server with organized folder structure
-- PostgreSQL integration using `pg` package
-- Controllers, models, routes, and middleware separation
-- Input validation and error handling middleware
-- SQL script for table creation and sample data
+## 🚀 Key Features
+
+- Modular structure: routes, controllers, services, middleware, and config separated
+- PostgreSQL connection managed with `pg` and environment variables
+- Automatic table creation at startup (`create.user.table.js`)
+- Input validation using **Joi**
+- Centralized error handling middleware
+- ES module (`type: "module"`) project with modern syntax
+- Development support with `nodemon`
+
+---
 
 ## 🧱 Project Structure
 
 ```
-package.json
-README.md
-src/
-  app.js
-  config/
-    db.js
-  controllers/
-    user.controllers.js
-  data/
-    create.user.table.js
-    data.sql
-  middleware/
-    errorHandaling.js
-    inputValidator.js
-  models/
-    user.models.js
-  routes/
-    user.routes.js
+express-postgresql-crud-api/
+├─ package.json
+├─ README.md
+├─ .env                # not checked in
+└─ src/
+   ├─ app.js           # app configuration
+   ├─ index.js         # server entry point
+   ├─ config/
+   │  └─ db.js         # pg Pool configuration
+   ├─ controllers/
+   │  └─ user.controllers.js
+   ├─ models/
+   │  ├─ create.user.table.js  # creates `users` table if missing
+   │  └─ data.sql              # same SQL used by create.user.table.js
+   ├─ middleware/
+   │  ├─ errorHandaling.js     # global error handler
+   │  └─ inputValidator.js     # request body validator
+   ├─ routes/
+   │  └─ user.routes.js
+   └─ services/
+      └─ user.services.js      # database queries
 ```
 
-## 🔧 Setup
+> ✨ The `app.js` file imports and executes `create.user.table.js`, so no manual migration step is required when starting the server.
 
-1. Clone the repository:
+---
+
+## 🔧 Getting Started
+
+1. **Clone the repo**
+
    ```bash
    git clone <repo-url>
    cd express-postgresql-crud-api
    ```
 
-2. Install dependencies:
+2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
-3. Create a `.env` file in the project root and configure your PostgreSQL connection:
+3. **Configure environment variables**
+   Create a `.env` file in the root with the following keys (adapt values to your setup):
+
    ```env
-   PGHOST=localhost
-   PGUSER=youruser
-   PGPASSWORD=yourpassword
-   PGDATABASE=yourdb
-   PGPORT=5432
+   DB_USER=youruser
+   DB_PASSWORD=yourpassword
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_DATABASE=yourdb
+   PORT=3000
    ```
 
-4. Run the SQL script to create the `users` table (alternatively use a migration tool):
-   ```bash
-   node src/data/create.user.table.js
-   # or run the SQL in data/data.sql against your database
-   ```
+4. **Start the application**
+   - Development mode (auto‑restart on changes):
+     ```bash
+     npm run dev
+     ```
+   - Production mode:
+     ```bash
+     npm start
+     ```
 
-5. Start the server:
-   ```bash
-   npm start
-   ```
+   The server listens on `http://127.0.0.1:$PORT` (default 3000) and will create the `users` table if it doesn’t already exist.
 
-## 📡 API Endpoints
+---
 
-| Method | Endpoint           | Description               |
-|--------|--------------------|---------------------------|
-| POST   | `/users`           | Create a new user         |
-| GET    | `/users`           | Get all users             |
-| GET    | `/users/:id`       | Get user by ID            |
-| PUT    | `/users/:id`       | Update user by ID         |
-| DELETE | `/users/:id`       | Delete user by ID         |
+## 📡 API Endpoints (base path `/api`)
 
-### Example Request Body for POST / PUT
+| Method | Endpoint         | Description         |
+| ------ | ---------------- | ------------------- |
+| POST   | `/api/users`     | Create a new user   |
+| GET    | `/api/users`     | List all users      |
+| GET    | `/api/users/:id` | Retrieve user by ID |
+| PUT    | `/api/users/:id` | Update user by ID   |
+| DELETE | `/api/users/:id` | Delete user by ID   |
+
+### Sample Request Body (POST/PUT)
+
 ```json
 {
   "name": "John Doe",
-  "email": "john@example.com",
-  "age": 30
+  "email": "john@example.com"
 }
 ```
 
+> ⚠️ `age` field is not stored by the current schema; only `name` and `email` are required.
+
+---
+
 ## 🛠️ Middleware
 
-- `inputValidator.js`: Validates request body for required fields and formats.
-- `errorHandaling.js`: Central error handler catching and formatting errors.
+- **`inputValidator.js`** – validates incoming payloads using Joi; responds with `400` on validation error.
+- **`errorHandaling.js`** – catches thrown errors and responds with a `500` status and message.
+
+---
 
 ## 📦 Dependencies
 
-- express
-- pg
-- dotenv
-- body-parser (if used)
+```json
+{
+  "express": "^5.2.1",
+  "pg": "^8.19.0",
+  "dotenv": "^17.3.1",
+  "joi": "^18.0.2",
+  "cors": "^2.8.6",
+  "nodemon": "^3.1.14" // dev
+}
+```
+
+---
 
 ## 📝 Notes
 
-- Adjust the database configuration as necessary for your environment.
-- This project is intended for learning and demonstration purposes.
+- The database configuration keys match those logged during startup by `src/config/db.js`.
+- To run the raw SQL directly, use the contents of `src/models/data.sql`.
+- This project is intended for educational/demo purposes and does not include authentication or production‑grade error handling.
+
+---
 
 ## 📞 Contact
 
-For questions or feedback, open an issue or contact the repository owner.
+For issues or contributions, please open an issue or submit a pull request on the repository.
